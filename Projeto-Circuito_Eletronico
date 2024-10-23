@@ -1,0 +1,37 @@
+int tempPin = A0;      // Pinagem do sensor de temperatura
+int buzzerPin = 8;     // Pinagem da buzina
+int ledPin = 9;        // Pinagem do LED vermelho
+int motorPin = 10;     // Pinagem do motor do ventilador
+
+void setup() {
+  pinMode(buzzerPin, OUTPUT);  
+  pinMode(ledPin, OUTPUT);     
+  pinMode(motorPin, OUTPUT);   
+  Serial.begin(9600);          
+}
+
+void loop() {
+  int tempReading = analogRead(tempPin);   
+  float voltage = tempReading * 5.0;
+  voltage /= 1024.0; 
+  float temperatureC = (voltage - 0.5) * 100 ;
+
+  if(temperatureC >= 30) {
+    digitalWrite(motorPin, HIGH);   // Liga o ventilador
+  } else {
+    digitalWrite(motorPin, LOW);    // Desliga o ventilador
+  }
+
+  if(temperatureC > 50) {
+    digitalWrite(ledPin, HIGH);     // Aciona o LED vermelho
+    digitalWrite(buzzerPin, HIGH);  // Aciona a buzina
+  } else {
+    digitalWrite(ledPin, LOW);      
+    digitalWrite(buzzerPin, LOW);   
+  }
+
+  Serial.print("Temperatura: ");
+  Serial.print(temperatureC);
+  Serial.println(" C");
+  delay(1000);                     
+}
