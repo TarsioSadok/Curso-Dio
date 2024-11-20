@@ -1,0 +1,52 @@
+import speech_recognition as sr
+import os
+import time
+
+# Função para ouvir e reconhecer a fala
+def ouvir_microfone():
+    microfone = sr.Recognizer()
+
+    with sr.Microphone() as source:
+        microfone.adjust_for_ambient_noise(source)
+        print("Diga alguma coisa: ")
+        audio = microfone.listen(source)
+
+    try:
+        frase = microfone.recognize_google(audio, language='pt-BR')
+        print("Você disse: " + frase)
+        executar_comando(frase)  # Chama a função para executar o comando
+
+    except sr.UnknownValueError:
+        print("Não entendi")
+    except sr.RequestError as e:
+        print("Erro ao solicitar resultados do serviço de reconhecimento de voz; {0}".format(e))
+
+    return "" # Retorna uma string vazia se houver erro
+
+
+# Função para executar comandos com base na frase reconhecida
+def executar_comando(frase):
+    if "navegador" in frase:
+        os.system("start Chrome.exe") # Windows
+        # Para outros sistemas operacionais:
+        # os.system("open /Applications/Google\ Chrome.app") # macOS
+        # os.system("google-chrome") # Linux
+    elif "excel" in frase.lower(): # Case-insensitive matching
+        os.system("start Excel.exe") # Windows
+        # Adapte para outros SOs como acima
+    elif "word" in frase.lower():
+        os.system("start WINWORD.EXE") # Windows  (Nome correto do executável)
+        # Adapte para outros SOs
+    elif "ligar luz" in frase.lower():  # Exemplo de controle de hardware (requer integração com Arduino)
+        print("Ligando a luz...")
+        # Código para comunicar com o Arduino e ligar a luz
+        # ... (Integração com a biblioteca serial, por exemplo)
+    # Adicione mais comandos aqui...
+    else:
+        print("Comando não reconhecido.")
+
+
+if __name__ == "__main__":
+    while True:  # Loop contínuo para ouvir comandos
+        ouvir_microfone()
+        time.sleep(1) # Pequena pausa para evitar consumo excessivo de CPU
