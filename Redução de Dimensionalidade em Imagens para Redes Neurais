@@ -1,0 +1,36 @@
+import cv2
+import numpy as np
+
+def converter_para_cinza(imagem):
+    """Converte uma imagem colorida para níveis de cinza."""
+    return cv2.cvtColor(imagem, cv2.COLOR_BGR2GRAY)
+
+def binarizar_imagem(imagem_cinza, threshold=127):
+    """Binariza uma imagem em níveis de cinza."""
+    _, imagem_binaria = cv2.threshold(imagem_cinza, threshold, 255, cv2.THRESH_BINARY)
+    return imagem_binaria
+
+if __name__ == "__main__":
+    # Carrega a imagem
+    imagem_original = cv2.imread("original.jpg")  # Substitua pelo caminho da sua imagem
+    
+    if imagem_original is None:
+        print("Erro ao carregar a imagem.")
+    else:
+        # Converte para níveis de cinza
+        imagem_cinza = converter_para_cinza(imagem_original)
+
+        # Binariza a imagem (preto e branco)
+        imagem_binaria = binarizar_imagem(imagem_cinza)
+
+        # Exibe as imagens (opcional)
+        cv2.imshow("Imagem Original", imagem_original)
+        cv2.imshow("Imagem em Cinza", imagem_cinza)
+        cv2.imshow("Imagem Binarizada", imagem_binaria)
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
+        
+        # Salva as imagens (opcional)
+        cv2.imwrite("imagem_cinza.jpg", imagem_cinza)
+        cv2.imwrite("imagem_binaria.jpg", imagem_binaria)
+        print("Imagens salvas com sucesso!")
