@@ -1,0 +1,49 @@
+def calcular_metricas(vp, vn, fp, fn):
+    """Calcula as métricas de avaliação de classificação.
+
+    Args:
+        vp (int): Verdadeiros Positivos.
+        vn (int): Verdadeiros Negativos.
+        fp (int): Falsos Positivos.
+        fn (int): Falsos Negativos.
+
+    Returns:
+        dict: Dicionário contendo as métricas calculadas.
+    """
+    
+    acuracia = (vp + vn) / (vp + vn + fp + fn)
+    sensibilidade = vp / (vp + fn) if (vp + fn) > 0 else 0 
+    especificidade = vn / (vn + fp) if (vn + fp) > 0 else 0
+    precisao = vp / (vp + fp) if (vp + fp) > 0 else 0
+    
+    #Calculo do F-Score só é executado se a precisão e a sensibilidade forem maiores que 0
+    f1_score = 2 * (precisao * sensibilidade) / (precisao + sensibilidade) if (precisao > 0 and sensibilidade > 0) else 0
+
+    metricas = {
+        "acuracia": acuracia,
+        "sensibilidade": sensibilidade,
+        "especificidade": especificidade,
+        "precisao": precisao,
+        "f1_score": f1_score,
+    }
+    return metricas
+
+
+# Exemplo de uso (escolha a matriz de confusão que desejar)
+matriz_confusao = {
+    "vp": 90,  # Verdadeiros Positivos
+    "vn": 75,  # Verdadeiros Negativos
+    "fp": 10,  # Falsos Positivos
+    "fn": 25,   # Falsos Negativos
+}
+
+metricas_calculadas = calcular_metricas(
+    matriz_confusao["vp"],
+    matriz_confusao["vn"],
+    matriz_confusao["fp"],
+    matriz_confusao["fn"],
+)
+
+# Imprime os resultados
+for metrica, valor in metricas_calculadas.items():
+    print(f"{metrica}: {valor:.4f}")
