@@ -1,0 +1,132 @@
+## 1. Módulo Speech-to-Text (STT):
+
+import speech_recognition as sr
+
+def ouvir_comando():
+    """Ouve o comando do usuário e retorna o texto."""
+    r = sr.Recognizer()
+    with sr.Microphone() as source:
+        print("Ouvindo...")
+        r.pause_threshold = 1 #Pauses de 1 segundo serão aceitas
+        audio = r.listen(source)
+
+    try:
+        print("Reconhecendo...")
+        comando = r.recognize_google(audio, language='pt-BR') # Reconhece em Português do Brasil
+        print(f"Você disse: {comando}")
+        return comando.lower() # Converte para minúsculas para facilitar o processamento
+    except sr.UnknownValueError:
+        print("Não entendi o que você disse.")
+        return None
+    except sr.RequestError as e:
+        print(f"Não foi possível conectar ao serviço de reconhecimento de voz; {e}")
+        return None
+
+___________________________________________________________________________________________________________
+
+
+2. Módulo Natural Language Processing (NLP) e Ações (Actions):
+
+import wikipedia
+import webbrowser
+from geopy.geocoders import Nominatim  # Para encontrar a farmácia mais próxima
+import gtts
+from playsound import playsound
+import os
+
+def falar(texto):
+    """Converte texto em áudio e reproduz."""
+    tts = gtts.gTTS(text=texto, lang='pt-br')
+    tts.save("output.mp3")
+    playsound("output.mp3")
+    os.remove("output.mp3")  # Remove o arquivo após reproduzir
+
+def executar_comando(comando):
+    """Executa o comando baseado na intenção do usuário."""
+    if "wikipedia" in comando:
+        try:
+            falar("Pesquisando no Wikipedia...")
+            comando = comando.replace("wikipedia", "")
+            resultado = wikipedia.summary(comando, sentences=2) # Pega as duas primeiras frases
+            falar("De acordo com o Wikipedia...")
+            falar(resultado)
+        except wikipedia.exceptions.PageError:
+            falar("Não encontrei nada sobre isso no Wikipedia.")
+        except wikipedia.exceptions.DisambiguationError as e:
+            falar(f"Encontrei várias opções no Wikipedia.  Você pode ser mais específico? As opções são: {e.options}")
+    elif "youtube" in comando:
+        falar("Abrindo o Youtube...")
+        webbrowser.open("https://www.youtube.com")
+    elif "farmácia" in comando:
+        falar("Localizando a farmácia mais próxima...")
+        localizar_farmacia_proxima() # Chama a função para localizar a farmácia
+    else:
+        falar("Não entendi o comando.")
+
+def localizar_farmacia_proxima():
+    """Localiza a farmácia mais próxima usando geolocalização."""
+    geolocator = Nominatim(user_agent="assistente_virtual") # User agent é importante para geopy
+    try:
+        falar("Qual a sua localização?")
+        localizacao_usuario = ouvir_comando()
+        if localizacao_usuario:
+            location = geolocator.geocode(localizacao_usuario)  # Obtém as coordenadas da localização do usuário
+
+            if location:
+                latitude = location.latitude
+                longitude = location.longitude
+
+                # Consulta ao Google Maps API para encontrar farmácias próximas
+                # (Substitua "SUA_CHAVE_API" pela sua chave da API do Google Maps)
+                url = f"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={latitude},{longitude}&radius=5000&type=pharmacy&key=SUA_CHAVE_API" # Raio de 5km
+
+                import requests
+                response = requests.get(url)
+                data = response.json()
+
+                if data["status"] == "OK" and data["results"]:
+                    primeira_farmacia = data["results"][0]
+                    nome_farmacia = primeira_farmacia["name"]
+                    endereco_farmacia = primeira_farmacia["vicinity"]
+
+                    falar(f"A farmácia mais próxima é a {nome_farmacia}, localizada em {endereco_farmacia}")
+                    webbrowser.open(f"https://www.google.com/maps/search/?api=1&query={nome_farmacia} near {latitude},{longitude}") # Abre o Google Maps
+                else:
+                    falar("Não foi possível encontrar farmácias próximas.")
+            else:
+                falar("Não consegui determinar sua localização.")
+
+        else:
+            falar("Não consegui entender sua localização")
+    except Exception as e:
+        print(f"Erro ao localizar farmácia: {e}")
+        falar("Ocorreu um erro ao tentar encontrar a farmácia.")
+
+_________________________________________________________________________________________________________________________________________________________________
+
+
+
+3. Módulo Text-to-Speech (TTS):
+
+Esta parte já está incluída na função falar() dentro do módulo NLP/Actions, utilizando a biblioteca gTTS.
+
+4. Módulo Interface Principal (Main):
+
+def main():
+    """Função principal para iniciar o assistente virtual."""
+    falar("Olá! Como posso ajudar?")  # Mensagem de boas-vindas
+    while True:
+        comando = ouvir_comando()
+        if comando:
+            executar_comando(comando)
+        else:
+            # Se não entender o comando, não faz nada e espera o próximo comando.
+            pass
+        # Adicione uma condição de saída, como "desligar" ou "sair"
+
+        if "desligar" in comando: #Exemplo de condição de saída
+            falar("Desligando...")
+            break
+
+if __name__ == "__main__":
+    main()
