@@ -1,0 +1,137 @@
+✅ 1. ESTRUTURA DO MODELO ESTRELA
+🔷 Tabela Fato: F_Vendas
+Contém os dados das vendas. Deve ter:
+
+Campo	Descrição
+SK_ID	Chave substituta (chave da linha)
+ID_Produto	FK para D_Produtos
+Produto	Nome do produto
+Units Sold	Quantidade vendida
+Sales Price	Preço de venda
+Discount Band	Faixa de desconto
+Segment	Segmento de vendas
+Country	País
+Salers	Vendedor
+Profit	Lucro
+Date	Data (FK para D_Calendário)
+🔷 Tabela Dimensão: D_Produtos
+Criada com agrupamento e medidas a partir da Financials_origem. Exemplo:
+
+Campo	Descrição
+ID_Produto	Identificador único do produto
+Produto	Nome do produto
+Média Unidades Vendidas	Média de Units Sold
+Média Valor Vendas	Média de Sales Price
+Mediana Valor Vendas	Mediana de Sales Price
+Máximo Valor Venda	Máximo de Sales Price
+Mínimo Valor Venda	Mínimo de Sales Price
+🔷 Tabela Dimensão: D_Produtos_Detalhes
+Campo	Descrição
+ID_Produto	FK para D_Produtos
+Discount Band	Faixa de desconto
+Sale Price	Preço de venda
+Units Sold	Unidades vendidas
+Manufactoring Price	Preço de fabricação
+🔷 Tabela Dimensão: D_Descontos
+Campo	Descrição
+ID_Produto	FK
+Discount	Desconto aplicado
+Discount Band	Faixa de desconto
+🔷 Tabela Dimensão: D_Detalhes
+Campo	Descrição
+Segment	Segmento de atuação
+Country	País
+Salers	Nome do vendedor
+Product Index*	Índice categórico com base em performance
+Dica: O campo Product Index pode ser feito com DAX, com algo como:
+
+DAX
+Copiar
+Editar
+ProductIndex = 
+SWITCH(TRUE(),
+    [Profit] > 100000, "TOP",
+    [Profit] > 50000, "INTERMEDIÁRIO",
+    TRUE(), "BAIXO DESEMPENHO"
+)
+🔷 Tabela Dimensão: D_Calendário
+Criada com DAX:
+
+DAX
+Copiar
+Editar
+D_Calendario = 
+CALENDAR(MIN(Financials_origem[Date]), MAX(Financials_origem[Date]))
+Adicione colunas como:
+
+DAX
+Copiar
+Editar
+Ano = YEAR([Date])
+Mes = FORMAT([Date], "MMMM")
+Trimestre = QUARTER([Date])
+DiaSemana = FORMAT([Date], "dddd")
+🧪 2. ETAPAS DO PROJETO (README SUGERIDO)
+📝 Etapas de Construção
+Importação da base Financial Sample
+
+Criação de backup: Financials_origem
+
+Criação das tabelas dimensão com Referência e transformações (agrupamentos, medidas, colunas calculadas)
+
+Criação da F_Vendas com as colunas centrais do modelo
+
+Criação da tabela de datas com DAX
+
+Relacionamentos entre tabelas no modelo em estrela
+
+Organização das tabelas e ocultação de colunas técnicas
+
+Criação de colunas DAX (ProductIndex, Time Intelligence, etc.)
+
+📁 3. ORGANIZAÇÃO DO REPOSITÓRIO NO GITHUB
+Estrutura sugerida:
+
+Copiar
+Editar
+/Financial-StarSchema-Project
+│
+├── Financial_Model.pbix
+├── star_schema.png
+├── README.md
+README.md Exemplo:
+markdown
+Copiar
+Editar
+# Desafio de Projeto - Power BI: Modelo Estrela com Financial Sample
+
+## 🔍 Objetivo
+Construir um modelo dimensional baseado em star schema utilizando a base Financial Sample.
+
+## 📌 Etapas
+- Criação de tabelas dimensão com transformações via Power Query
+- Criação de medidas e colunas DAX (índice de performance, calendário)
+- Construção da tabela fato F_Vendas
+- Modelagem e relacionamentos
+- Geração de visualizações e análise exploratória (opcional)
+
+## 📊 Funcionalidades DAX
+- `CALENDAR()`, `SWITCH()`, `FORMAT()`, `YEAR()`, `QUARTER()`, etc.
+- Colunas calculadas para categorização de produtos
+- Medidas para médias, máximos, mínimos, medianas
+
+## 🗂️ Arquivos
+- `Financial_Model.pbix`: Arquivo do projeto no Power BI
+- `star_schema.png`: Diagrama visual do modelo em estrela
+
+Se quiser, posso te ajudar a:
+
+Gerar o diagrama visual
+
+Montar o README final
+
+Escrever as fórmulas DAX completas
+
+Fazer um exemplo de commit inicial para o GitHub
+
+É só me dizer onde quer começar!
