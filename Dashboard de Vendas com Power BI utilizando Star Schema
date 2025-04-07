@@ -1,0 +1,102 @@
+Ótimo! Vamos montar um **esquema em estrela (star schema)** com foco no **professor** como objeto de análise. Isso significa que a **tabela fato** será construída para analisar informações relacionadas à atuação do professor — disciplinas, cursos, departamentos, carga horária, etc.
+
+---
+
+## ✅ **1. TABELA FATO: `fato_professor_atuacao`**
+
+Essa tabela armazena os eventos de atuação do professor em cursos/disciplina. Exemplo de atributos:
+
+| **Campo**                | **Descrição**                        |
+|--------------------------|--------------------------------------|
+| `id_fato`                | Chave primária                      |
+| `id_professor`           | FK para dimensão professor          |
+| `id_curso`               | FK para dimensão curso              |
+| `id_disciplina`          | FK para dimensão disciplina         |
+| `id_departamento`        | FK para dimensão departamento       |
+| `id_tempo`               | FK para dimensão tempo              |
+| `carga_horaria`          | Horas dedicadas pelo professor      |
+| `qtde_turmas`            | Número de turmas ministradas        |
+| `avaliacao_media`        | Avaliação média do professor        |
+
+---
+
+## ✅ **2. TABELAS DIMENSÃO**
+
+### 🔹 **Dimensão Professor: `dim_professor`**
+
+| Campo              | Descrição                       |
+|--------------------|---------------------------------|
+| `id_professor`     | Chave primária                  |
+| `nome`             | Nome completo                   |
+| `titulação`        | Doutor, Mestre, Especialista... |
+| `regime_trabalho`  | 20h, 40h, Dedicação Exclusiva   |
+| `email`            | Email institucional             |
+| `sexo`             | Gênero                          |
+| `data_admissao`    | Data de ingresso na instituição |
+
+---
+
+### 🔹 **Dimensão Curso: `dim_curso`**
+
+| Campo           | Descrição                         |
+|------------------|-----------------------------------|
+| `id_curso`       | Chave primária                    |
+| `nome_curso`     | Nome do curso                     |
+| `modalidade`     | Presencial, EAD, Semipresencial   |
+| `grau`           | Bacharelado, Licenciatura, etc.   |
+| `nivel`          | Graduação, Pós-graduação          |
+
+---
+
+### 🔹 **Dimensão Disciplina: `dim_disciplina`**
+
+| Campo             | Descrição                       |
+|--------------------|-------------------------------|
+| `id_disciplina`    | Chave primária                |
+| `nome_disciplina`  | Nome da disciplina            |
+| `carga_horaria`    | Carga horária total           |
+| `ementa`           | Ementa básica da disciplina   |
+
+---
+
+### 🔹 **Dimensão Departamento: `dim_departamento`**
+
+| Campo               | Descrição                        |
+|----------------------|----------------------------------|
+| `id_departamento`    | Chave primária                   |
+| `nome_departamento`  | Nome do departamento             |
+| `area_conhecimento`  | Área de atuação (Exatas, etc.)   |
+| `campus`             | Nome ou cidade do campus         |
+
+---
+
+### 🔹 **Dimensão Tempo: `dim_tempo`**
+
+| Campo         | Descrição               |
+|----------------|-------------------------|
+| `id_tempo`     | Chave primária          |
+| `data_inicio`  | Data de início da oferta|
+| `data_fim`     | Data de fim da oferta   |
+| `ano`          | Ano                     |
+| `semestre`     | 1 ou 2                  |
+| `trimestre`    | Opcional                |
+| `mes`          | Mês de início           |
+| `dia_semana`   | Dia da semana inicial   |
+
+---
+
+## 🧩 **Modelo Estrela - Esquema Resumido**
+
+```text
+                            dim_tempo
+                                |
+                                |
+dim_professor ---             fato_professor_atuacao         --- dim_curso
+                                |
+                                |
+                     dim_disciplina --- dim_departamento
+```
+
+---
+
+Se quiser, posso montar esse esquema como um **diagrama visual (ERD)** ou gerar o **script SQL** para a criação dessas tabelas. Qual formato você prefere seguir agora?
