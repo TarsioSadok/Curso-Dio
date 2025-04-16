@@ -1,0 +1,93 @@
+🛠️ Implementação no Power BI – Passo a passo
+🔹 1. Página 1 – Visão Geral com foco em UX
+Layout:
+
+Use a grade de alinhamento do Power BI (ativar "Snap to grid") pra organizar os visuais.
+
+Distribua o conteúdo em uma composição próxima da proporção áurea. Exemplo:
+
+Lado esquerdo com KPIs principais (61.8%)
+
+Lado direito com gráficos de suporte (38.2%)
+
+Visuals sugeridos:
+
+KPIs (cartões): Receita Total, Despesas, Lucro Líquido
+
+Gráfico de barras/colunas: Receita por categoria
+
+Gráfico de linha: Evolução temporal
+
+🔹 2. Página 2 – Comparativo
+Replique o estilo da Página 1 (mesmas cores, fontes, distribuição)
+
+Gráficos:
+
+Barras empilhadas: comparação mês a mês
+
+Tabela com cores condicionais para destacar maiores/menores valores
+
+Segmentações: filtros por ano, trimestre, categoria
+
+🔹 3. Página 3 – Detalhamento
+Use visual de tabela detalhada com drill-through ou matriz interativa
+
+Inserir indicadores adicionais como:
+
+% variação
+
+Média móvel
+
+Pode usar gráfico de dispersão ou de caixa (boxplot) para mostrar variabilidade
+
+🧭 Navegabilidade – Botões e Menus
+🔸 Botões e Menus (em todas as páginas)
+Como fazer:
+
+Inserir > Botão > Navegação entre páginas
+
+Personalizar:
+
+Nome do botão (ex: “🏠 Visão Geral”)
+
+Adicionar ícones (Imagens SVG ou ícones nativos)
+
+Usar cor de destaque na página ativa
+
+No painel de formatação: Ativar efeito de sombra ou preenchimento ao passar o mouse
+
+Sugestão de menu lateral (em todas as páginas):
+
+
+Ícone	Nome	Navega para
+🏠	Visão Geral	Página 1
+📊	Comparativo	Página 2
+📋	Detalhamento	Página 3
+🔸 Botões de “Foco/Selecionar”
+Use “Botão de alternância” com Bookmarks:
+
+Ex: Mostrar/esconder detalhes
+
+Criar marcadores (Bookmarks) no painel de visualizações
+
+Usar botão para alternar entre estado A e B (com ação: marcar marcador)
+
+🎨 Estilo & Design Dicas
+Contraste:
+
+Use fundo escuro com texto claro (ou vice-versa)
+
+Cores fortes para KPIs (verde, vermelho, azul)
+
+Fonte:
+
+Cabeçalhos em Segoe UI Bold, corpo em Segoe UI Regular
+
+Tamanhos diferentes pra criar hierarquia visual
+
+Elementos gráficos:
+
+Usar formas curvas ou ícones para deixar mais “amigável”
+
+Evite sobrecarga visual: foco em clareza
+
