@@ -1,0 +1,55 @@
+🧠 Lógica de Disposição: Pensando na experiência do cliente
+Informações mais relevantes devem estar:
+
+No topo (destaque visual)
+
+À esquerda (região mais lida)
+
+Evite poluição visual — use agrupamentos lógicos.
+
+Use filtros segmentados por país, categoria ou período (com slicers ou dropdowns).
+
+📄 Estrutura sugerida da Página de Detalhes (ou 2 páginas)
+🔹 Página 1 – Detalhes Estratégicos (Painel de Insights)
+
+Área	Conteúdo sugerido	Tipo de Visual
+Topo (esquerda)	TOP 3 Produtos por receita, lucro, unidades	Barras horizontais ou cartões empilhados
+Topo (direita)	Principais Países com maior faturamento ou lucro	Mapa interativo ou gráfico de colunas
+Meio	Gráfico de Dispersão: Unidades vendidas vs. Vendas	Dispersão (com cor por categoria ou país)
+Base	Segmentação por Mês e Produto	Slicers + Tabela com drill-down
+🔹 Página 2 – Análise Avançada (se necessário)
+
+Área	Conteúdo sugerido	Tipo de Visual
+Topo	Clusters de Produtos ou Clientes	Gráfico de agrupamento ou cluster
+Meio	Compartimentação por Categorias/Subcategorias	Treemap, sunburst, ou barras empilhadas
+Base	Comparações Temporais (ano a ano ou mês a mês)	Gráfico de linha com segmentação
+🔢 Medidas que você pode (e deve) criar no DAX
+Aqui vão exemplos de medidas que você pode precisar (dependendo da estrutura dos seus dados):
+
+DAX
+Copiar
+Editar
+Total Vendas = SUM(FatoVendas[ValorVenda])
+
+Lucro = SUM(FatoVendas[Lucro])
+
+Unidades Vendidas = SUM(FatoVendas[Quantidade])
+
+Ticket Médio = [Total Vendas] / [Unidades Vendidas]
+
+Lucro por Unidade = [Lucro] / [Unidades Vendidas]
+
+TOP 3 Produtos = TOPN(3, SUMMARIZE(Produtos, Produtos[Nome], "TotalVendas", [Total Vendas]), [Total Vendas])
+Se quiser, posso te ajudar a escrever essas medidas com base no seu modelo específico. Só me dizer os nomes das tabelas e colunas que você está usando.
+
+🖌️ Dicas visuais (UX/UI) para Power BI
+Use cores para reforçar agrupamentos (ex: categoria A = azul, B = verde...)
+
+Use ícones pequenos ou imagens para enriquecer os dados (ex: bandeiras para países)
+
+Ative o tooltip com detalhes extras ao passar o mouse
+
+Use o painel de formatação condicional para destacar altos e baixos
+
+Prefira visuais responsivos e evite rolagem desnecessária
+
