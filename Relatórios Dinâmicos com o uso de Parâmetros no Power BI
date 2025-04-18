@@ -1,0 +1,127 @@
+ 1. Tabela de Parâmetro — Categoria
+DAX
+Copiar
+Editar
+ParametroCategoria = DATATABLE(
+    "CategoriaEscolhida", STRING,
+    {
+        {"Segment"},
+        {"Category"},
+        {"Sub-Category"}
+    }
+)
+✅ 2. Medida para Categoria Dinâmica
+DAX
+Copiar
+Editar
+CategoriaSelecionada = 
+SWITCH(
+    SELECTEDVALUE(ParametroCategoria[CategoriaEscolhida]),
+    "Segment", SELECTEDVALUE(Superstore[Segment]),
+    "Category", SELECTEDVALUE(Superstore[Category]),
+    "Sub-Category", SELECTEDVALUE(Superstore[Sub-Category])
+)
+✅ 3. Tabela de Parâmetro — Métrica de Valor
+DAX
+Copiar
+Editar
+ParametroValor = DATATABLE(
+    "MetricaEscolhida", STRING,
+    {
+        {"Sales"},
+        {"Profit"},
+        {"Quantity"}
+    }
+)
+✅ 4. Medida Dinâmica para Valores
+DAX
+Copiar
+Editar
+MetricaSelecionada = 
+SWITCH(
+    SELECTEDVALUE(ParametroValor[MetricaEscolhida]),
+    "Sales", SUM(Superstore[Sales]),
+    "Profit", SUM(Superstore[Profit]),
+    "Quantity", SUM(Superstore[Quantity])
+)
+✅ 5. Título Dinâmico (opcional, mas estiloso)
+DAX
+Copiar
+Editar
+TituloDinamico = 
+"Análise de " & SELECTEDVALUE(ParametroValor[MetricaEscolhida]) & 
+" por " & SELECTEDVALUE(ParametroCategoria[CategoriaEscolhida])
+Você pode usar essa medida em um cartão (visual de Cartão) pra exibir um título automático de acordo com as seleções feitas nos slicers.
+
+✅ Slicers que você precisa adicionar:
+Um slicer com ParametroCategoria[CategoriaEscolhida]
+
+Um slicer com ParametroValor[MetricaEscolhida]
+
+✅ Visuais sugeridos:
+📊 Gráfico 1 — Colunas Clusterizadas:
+Eixo X: CategoriaSelecionada
+
+Valores: SUM(Sales) ou MetricaSelecionada (para deixar dinâmico)
+
+Legenda: opcional (ex: Região)
+
+📈 Gráfico 2 — Linha temporal:
+Eixo X: Order Date
+
+Valores: MetricaSelecionada
+
+Filtros opcionais: Region, Category, etc.
+
+
+O ChatGPT disse:
+Massa! Vamos fechar com chave de ouro: aqui vai uma simulação de layout visual e sugestões de storytelling pra você apresentar esses visuais no Power BI com estilo, contexto e clareza.
+
+🎨 Sugestão de Layout do Relatório no Power BI
+🧱 Estrutura da Página
+sql
+Copiar
+Editar
++-----------------------------------------------------+
+|             TÍTULO: [Cartão com TituloDinamico]     |
++-----------------------------------------------------+
+|  [Slicer: CategoriaEscolhida]   [Slicer: MetricaEscolhida] |
++-----------------------------------------------------+
+|        📊 Gráfico 1: Colunas por CategoriaSelecionada       |
+|             Eixo Y: MetricaSelecionada                      |
+|             Eixo X: CategoriaSelecionada                    |
++-----------------------------------------------------+
+|        📈 Gráfico 2: Linha Temporal por Order Date          |
+|             Eixo X: Order Date                              |
+|             Eixo Y: MetricaSelecionada                      |
+|             (Filtro opcional: Region ou Segment)            |
++-----------------------------------------------------+
+📖 Storytelling para Apresentação dos Dados
+✅ Introdução / Contexto
+Este relatório interativo permite que o usuário explore o desempenho da empresa sob múltiplas perspectivas, combinando agrupamentos (categorias) e métricas (valores financeiros) usando parâmetros dinâmicos.
+
+🔍 Gráfico 1 – Análise Comparativa por Categoria
+O primeiro gráfico apresenta um comparativo de desempenho com base na categoria selecionada: Segment, Category ou Sub-Category.
+Por exemplo, ao escolher “Sub-Category”, é possível ver claramente quais produtos lideram em vendas ou lucro.
+Se o usuário mudar para “Segment”, pode descobrir que o segmento "Consumer" gera mais receita, mas "Corporate" possui melhor margem de lucro.
+
+📈 Gráfico 2 – Evolução Temporal por Métrica Selecionada
+O segundo gráfico mostra como a métrica escolhida (Sales, Profit ou Quantity) se comporta ao longo do tempo.
+Essa visualização ajuda a identificar sazonalidade, quedas inesperadas ou picos de desempenho.
+Exemplo: um pico em vendas no fim do ano pode indicar um comportamento sazonal, enquanto um lucro negativo em um mês pode apontar para uma campanha mal planejada.
+
+💡 Exemplos de Insights que você pode apresentar
+"Apesar das maiores vendas em ‘Phones’, o lucro dessa subcategoria é proporcionalmente menor."
+
+"O segmento ‘Home Office’ tem menor volume de vendas, mas uma margem de lucro significativamente maior em determinados meses."
+
+"Há um padrão de queda em vendas entre janeiro e fevereiro todos os anos, indicando uma oportunidade para campanhas de impulsionamento."
+
+
+
+
+
+
+
+
+
