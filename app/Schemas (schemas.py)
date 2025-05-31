@@ -1,0 +1,27 @@
+from pydantic import BaseModel, Field
+from typing import List
+
+class UserCreate(BaseModel):
+    username: str
+    password: str
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+
+class TransactionCreate(BaseModel):
+    type: str
+    amount: float = Field(..., gt=0)
+
+class TransactionOut(BaseModel):
+    id: int
+    type: str
+    amount: float
+
+    class Config:
+        orm_mode = True
+
+class AccountOut(BaseModel):
+    id: int
+    balance: float
+    transactions: List[TransactionOut]
