@@ -1,0 +1,11 @@
+app/
+├── main.py
+├── models.py
+├── schemas.py
+├── database.py
+├── auth.py
+├── routes/
+│   ├── auth.py
+│   ├── transactions.py
+│   └── accounts.py
+└── utils.py
