@@ -1,0 +1,29 @@
+from fastapi import APIRouter, Depends, HTTPException
+from app.database import get_db
+from app.models import Account, Transaction
+from app.schemas import TransactionCreate
+from sqlalchemy.ext.asyncio import AsyncSession
+
+router = APIRouter()
+
+@router.post("/accounts/{account_id}/transaction")
+async def transaction(account_id: int, trans: TransactionCreate, db: AsyncSession = Depends(get_db)):
+    result = await db.execute(Account.__table__.select().where(Account.id == account_id))
+    account = result.scalar_one_or_none()
+
+    if not account:
+        raise HTTPException(status_code=404, detail="Account not found")
+    
+    if trans.type == "withdraw" and account.balance < trans.amount:
+        raise HTTPException(status_code=400, detail="Insufficient funds")
+    
+    if trans.type == "withdraw":
+        account.balance -= trans.amount
+    else:
+        account.balance += trans.amount
+
+    new_trans = Transaction(account_id=account_id, type=trans.type, amount=trans.amount)
+    db.add(new_trans)
+    db.add(account)
+    await db.commit()
+    return {"msg": "Transaction successful"}
