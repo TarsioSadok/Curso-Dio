@@ -1,0 +1,6 @@
+⚠️ Validação forte: Não permitir valores negativos.
+
+✅ JWT: proteger endpoints com Depends (dá pra criar um dependency get_current_user pra validar token).
+
+✅ OpenAPI: FastAPI já gera automático, lindão.
+
